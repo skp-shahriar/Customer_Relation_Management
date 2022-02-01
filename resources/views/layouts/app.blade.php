@@ -215,6 +215,11 @@
                                                 <span class="sidebar-menu-text">Dashboard</span>
                                             </a>
                                         </li>
+                                        <li class="sidebar-menu-item ">
+                                            <a class="sidebar-menu-button" href="{{route('gantt')}}">
+                                                <span class="sidebar-menu-text">Gantt</span>
+                                            </a>
+                                        </li>
 
                                     </ul>
                                 </li>
@@ -310,6 +315,21 @@
 
                                     </ul>
                                 </li>
+                                <li class="sidebar-menu-item active open">
+                                    <a class="sidebar-menu-button" data-toggle="collapse" href="#dashboards_menu">
+                                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                        <span class="sidebar-menu-text">Estimate</span>
+                                        <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                    </a>
+                                    <ul class="sidebar-submenu collapse show " id="dashboards_menu">
+                                        <li class="sidebar-menu-item active">
+                                            <a class="sidebar-menu-button" href="{{route('cm_estimate')}}">
+                                                <span class="sidebar-menu-text">Estimate list</span>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
                             </ul>
 
 
@@ -378,7 +398,7 @@
     {{-- Table --}}
     <script>
         $(document).ready(function () {
-            $('.table').DataTable()
+            $('.data_table').DataTable()
         });
     </script>
     {{-- Ck editor --}}

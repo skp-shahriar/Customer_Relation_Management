@@ -166,4 +166,8 @@ class CustomersController extends Controller
         $dataCon = Contact::where('customer_id',$id)->get();
         return view('admin.customer.customer_details', compact('data','dataCon'));
     }
+    public function gantt()
+    {
+        return view('admin.gantt');
+    }
 }
