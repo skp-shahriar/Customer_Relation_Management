@@ -27,11 +27,28 @@ class User extends Authenticatable
     ];
     public function departments()
     {
-        return $this->belongsTo(Departments::class, 'department_id', 'id' );
+        return $this->belongsTo(Departments::class, 'department_id', 'id');
     }
     public function customers()
     {
-        return $this->hasOne(Customers::class, 'user_id', 'id' );
+        return $this->hasOne(Customers::class, 'user_id', 'id');
+    }
+
+
+
+    public function estimateuser()
+    {
+        return $this->hasMany(EstimateUser::class);
+    }
+
+    public function customer()
+    {
+        return $this->hasOne('App\Models\Customers', 'user_id', 'id');
+    }
+    
+    public function assignedBy()
+    {
+        return $this->hasOne('App\Models\Customers', 'assigned_to', 'id');
     }
 
     /**

@@ -16,8 +16,6 @@ class Item extends Model
         'unit_id'
     ];
 
-
-    
     public function tax()
     {
         return $this->belongsTo(Tax::class, 'tax_id', 'id');
@@ -26,9 +24,18 @@ class Item extends Model
     {
         return $this->belongsTo(Unit::class, 'unit_id', 'id');
     }
+    public function estimateitems()
+    {
+        return $this->hasMany(EstimateItems::class);
+    }
+
     public function proposalItem()
     {
         return $this->hasMany(ProposalItem::class);
     }
-    
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
 }

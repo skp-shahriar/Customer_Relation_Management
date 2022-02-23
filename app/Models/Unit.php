@@ -8,9 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Unit extends Model
 {
     use HasFactory;
-    protected $table = 'units';
-
     protected $fillable = [
-        'unit_name',
+        'unit_name'
     ];
+
+    public function item()
+    {
+        return $this->hasMany(Item::class);
+    }
 }

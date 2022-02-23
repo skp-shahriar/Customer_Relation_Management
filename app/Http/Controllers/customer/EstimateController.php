@@ -19,11 +19,9 @@ class EstimateController extends Controller
     public function index()
     {
         $C_id=auth()->user()->customers->id;
-        // dd($a);
-        // exit;
         $estimate= Estimate::where('customer_id', $C_id)->get();
         
-        return view('customers.estimate.estimate_list', compact('estimate'));
+        return view('customer.estimate.estimate_list', compact('estimate'));
     }
 
     /**
@@ -59,7 +57,7 @@ class EstimateController extends Controller
         $estimate_user= EstimateUser::where('estimate_id',$id)->get();
         $estimate_items= EstimateItems::where('estimate_id',$id)->get();
         $estimate_user_count=count($estimate_user);
-        return view('customers.estimate.estimate_view',compact('estimate', 'estimate_user','estimate_items','estimate_user_count'));
+        return view('customer.estimate.estimate_view',compact('estimate', 'estimate_user','estimate_items','estimate_user_count'));
     }
 
     /**

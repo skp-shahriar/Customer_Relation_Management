@@ -9,7 +9,8 @@ use phpDocumentor\Reflection\DocBlock\Tags\Uses;
 class Departments extends Model
 {
     use HasFactory;
-    protected $fillable=[
+    protected $table = 'departments';
+    protected $fillable = [
         'name'
     ];
     public function user()

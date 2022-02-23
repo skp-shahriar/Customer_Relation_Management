@@ -5,19 +5,19 @@
 @section('content')
 <script src="{{ asset('js/daypilot-all.min.js') }}" type="text/javascript"></script>
 
-
+{{-- {{ dd($start_date) }} --}}
 <div id="dp"></div>
 
 
 
 <script type="text/javascript">
     const dp = new DayPilot.Gantt("dp");
-    dp.startDate = "2021-10-01";
-    dp.days = 31;
+    dp.startDate = "{{$start_date}}";
+    dp.days = {{$days}};
     dp.init();
     loadTasks();
     function loadTasks() {
-        dp.tasks.load("https://mocki.io/v1/22a7ee80-d215-411f-b844-bd0a6e3ac971");
+        dp.tasks.load("http://localhost:8000/api/project/{{$p_id}}");
     }
 </script>
 @endsection

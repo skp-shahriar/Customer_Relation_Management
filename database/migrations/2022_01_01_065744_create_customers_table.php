@@ -16,12 +16,19 @@ class CreateCustomersTable extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users')->onUpdate('cascade')
-            ->onDelete('cascade');
-            $table->string('company_name'); 
-            $table->string('photo'); 
-            $table->string('phone'); 
-            $table->string('address'); 
-            $table->string('vat_number'); 
+                ->onDelete('cascade');
+            // $table->foreignId('assigned_to')->references('id')->on('users')->onUpdate('cascade')
+            //     ->onDelete('cascade')->nullable();
+            $table->bigInteger('assigned_to')->unsigned()->nullable();
+            $table->foreign('assigned_to')->references('id')->on('users')->onDelete('cascade');
+            $table->string('company_name');
+            $table->string('photo')->nullable();
+            $table->string('phone');
+            $table->string('address')->nullable();
+            $table->string('vat_number')->nullable();
+            $table->string('city')->nullable();
+            $table->string('zip')->nullable();
+            $table->string('country')->nullable();
             $table->timestamps();
         });
     }

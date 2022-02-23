@@ -14,9 +14,8 @@
 
     {{-- Ck editor --}}
     <script src="https://cdn.ckeditor.com/ckeditor5/31.1.0/classic/ckeditor.js"></script>
-
     <!-- jQuery -->
-    <script src="{{asset('assets/vendor/jquery.min.js')}}"></script>
+    <script src="{{ asset('assets/vendor/jquery.min.js') }}"></script>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -24,17 +23,28 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <!-- Table -->
     <link type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" rel="stylesheet">
+
+   
     <!-- Perfect Scrollbar -->
-    <link type="text/css" href="{{asset('assets/vendor/perfect-scrollbar.css')}}" rel="stylesheet">
+    <link type="text/css" href="{{ asset('assets/vendor/perfect-scrollbar.css') }}" rel="stylesheet">
+
+     <!-- datatable responsive css-->
+     <link type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css" rel="stylesheet">
+
+
+    <!-- Toastr -->
+    <link type="text/css" href="{{ asset('assets/css/toastr.min.css') }}" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="{{ asset('assets/vendor/jquery.min.js') }}"></script>
 
     <!-- App CSS -->
-    <link type="text/css" href="{{asset('assets/css/style.css')}}" rel="stylesheet">
+    <link type="text/css" href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 
     <!-- Material Design Icons -->
-    <link type="text/css" href="{{asset('assets/css/vendor-material-icons.css')}}" rel="stylesheet">
+    <link type="text/css" href="{{ asset('assets/css/vendor-material-icons.css') }}" rel="stylesheet">
 
     <!-- Font Awesome FREE Icons -->
-    <link type="text/css" href="{{asset('assets/css/vendor-fontawesome-free.css')}}" rel="stylesheet">
+    <link type="text/css" href="{{ asset('assets/css/vendor-fontawesome-free.css') }}" rel="stylesheet">
 
 
 </head>
@@ -86,7 +96,7 @@
                                             <div class="dropdown-item d-flex">
                                                 <div class="mr-3">
                                                     <div class="avatar avatar-sm" style="width: 32px; height: 32px;">
-                                                        <img src="{{asset('assets/images/256_daniel-gaffey-1060698-unsplash.jpg')}}"
+                                                        <img src="{{ asset('assets/images/256_daniel-gaffey-1060698-unsplash.jpg') }}"
                                                             alt="Avatar" class="avatar-img rounded-circle">
                                                     </div>
                                                 </div>
@@ -127,7 +137,7 @@
                                     <span class="mr-1 d-flex-inline">
                                         <span class="text-light">{{ Auth::user()->name }}</span>
                                     </span>
-                                    <img src="{{asset('assets/images/avatar/admin.png')}}" class="rounded-circle"
+                                    <img src="{{ asset('assets/images/avatar/admin.png') }}" class="rounded-circle"
                                         width="32" alt="Frontted">
                                 </a>
                                 <div id="account_menu" class="dropdown-menu dropdown-menu-right">
@@ -136,19 +146,21 @@
                                         <div class="text-muted">{{ Auth::user()->email }}</div>
                                     </div>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{route('dashboard')}}"><i
+                                    <a class="dropdown-item" href="{{ route('dashboard') }}"><i
                                             class="material-icons">dvr</i>
                                         Dashboard</a>
                                     <a class="dropdown-item" href="profile.html"><i
                                             class="material-icons">account_circle</i> My profile</a>
-                                    <a class="dropdown-item" href="edit-account.html"><i class="material-icons">edit</i>
+                                    <a class="dropdown-item" href="edit-account.html"><i
+                                            class="material-icons">edit</i>
                                         Edit account</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i
                                             class="material-icons">exit_to_app</i>
                                         {{ __('Logout') }}</a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        class="d-none">
                                         @csrf
                                     </form>
                                 </div>
@@ -166,7 +178,6 @@
         <!-- Header Layout Content -->
         <div class="mdk-header-layout__content">
 
-            @if (auth()->user()->role=='admin')
             <div class="mdk-drawer-layout js-mdk-drawer-layout" data-push data-responsive-width="992px">
                 <div class="mdk-drawer-layout__content page">
 
@@ -176,10 +187,11 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb mb-0">
                                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">@yield('page_title')</li>
+                                        <li class="breadcrumb-item " aria-current="page">@yield('page_title')</li>
                                     </ol>
                                 </nav>
                                 <h1 class="m-0">@yield('page_title')</h1>
+                                @yield('page_title_extra')
                             </div>
 
                         </div>
@@ -197,149 +209,507 @@
 
                 </div>
                 <!-- // END drawer-layout__content -->
+                @if (auth()->user()->role == 'admin')
+                    <div class="mdk-drawer  js-mdk-drawer" id="default-drawer" data-align="start">
+                        <div class="mdk-drawer__content">
+                            <div class="sidebar sidebar-light sidebar-left sidebar-p-t" data-perfect-scrollbar>
+                                <div class="sidebar-heading">Menu</div>
+                                <ul class="sidebar-menu">
+                                    <li class="sidebar-menu-item">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#dashboards_menu">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Dashboards</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse  " id="dashboards_menu">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('dashboard') }}">
+                                                    <span class="sidebar-menu-text">Dashboard</span>
+                                                </a>
+                                            </li>
 
-                <div class="mdk-drawer  js-mdk-drawer" id="default-drawer" data-align="start">
-                    <div class="mdk-drawer__content">
-                        <div class="sidebar sidebar-light sidebar-left sidebar-p-t" data-perfect-scrollbar>
-                            <div class="sidebar-heading">Menu</div>
-                            <ul class="sidebar-menu">
-                                <li class="sidebar-menu-item active open">
-                                    <a class="sidebar-menu-button" data-toggle="collapse" href="#dashboards_menu">
-                                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
-                                        <span class="sidebar-menu-text">Dashboards</span>
-                                        <span class="ml-auto sidebar-menu-toggle-icon"></span>
-                                    </a>
-                                    <ul class="sidebar-submenu collapse show " id="dashboards_menu">
-                                        <li class="sidebar-menu-item active">
-                                            <a class="sidebar-menu-button" href="{{route('dashboard')}}">
-                                                <span class="sidebar-menu-text">Dashboard</span>
-                                            </a>
-                                        </li>
-                                        <li class="sidebar-menu-item ">
-                                            <a class="sidebar-menu-button" href="{{route('gantt')}}">
-                                                <span class="sidebar-menu-text">Gantt</span>
-                                            </a>
-                                        </li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li class="sidebar-menu-item  ">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#lead">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Leads</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse  " id="lead">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('leads.index') }}">
+                                                    <span class="sidebar-menu-text">Show Lead</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="sidebar-menu-item  ">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#customer">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Customer</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse  " id="customer">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button"
+                                                    href="{{ route('customers.create') }}">
+                                                    <span class="sidebar-menu-text">Add Customer</span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('customers.index') }}">
+                                                    <span class="sidebar-menu-text">Customers List</span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('contacts.create') }}">
+                                                    <span class="sidebar-menu-text">Add Contact</span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('contacts.index') }}">
+                                                    <span class="sidebar-menu-text">Contacts List</span>
+                                                </a>
+                                            </li>
 
-                                    </ul>
-                                </li>
+                                        </ul>
+                                    </li>
 
-                                <li class="sidebar-menu-item active open">
-                                    <a class="sidebar-menu-button" data-toggle="collapse" href="#customer">
-                                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
-                                        <span class="sidebar-menu-text">Customer</span>
-                                        <span class="ml-auto sidebar-menu-toggle-icon"></span>
-                                    </a>
-                                    <ul class="sidebar-submenu collapse show " id="customer">
-                                        <li class="sidebar-menu-item active">
-                                            <a class="sidebar-menu-button" href="{{route('customers.create')}}">
-                                                <span class="sidebar-menu-text">Add Customer</span>
-                                            </a>
-                                        </li>
-                                        <li class="sidebar-menu-item active">
-                                            <a class="sidebar-menu-button" href="{{route('customers.index')}}">
-                                                <span class="sidebar-menu-text">Customers List</span>
-                                            </a>
-                                        </li>
-                                        <li class="sidebar-menu-item active">
-                                            <a class="sidebar-menu-button" href="{{route('contacts.create')}}">
-                                                <span class="sidebar-menu-text">Add Contact</span>
-                                            </a>
-                                        </li>
-                                        <li class="sidebar-menu-item active">
-                                            <a class="sidebar-menu-button" href="{{route('contacts.index')}}">
-                                                <span class="sidebar-menu-text">Contacts List</span>
-                                            </a>
-                                        </li>
+                                    <li class="sidebar-menu-item  ">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#proposal">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Proposals</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse  " id="proposal">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('proposal.index') }}">
+                                                    <span class="sidebar-menu-text">Proposal List</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <ul class="sidebar-submenu collapse  " id="proposal">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button"
+                                                    href="{{ route('proposal_status.index') }}">
+                                                    <span class="sidebar-menu-text">Panding Proposals</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <ul class="sidebar-submenu collapse  " id="proposal">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button"
+                                                    href="{{ route('approved_proposal') }}">
+                                                    <span class="sidebar-menu-text">Accepted Proposals</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <ul class="sidebar-submenu collapse  " id="proposal">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button"
+                                                    href="{{ route('declined_proposal') }}">
+                                                    <span class="sidebar-menu-text">Declined Proposals</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="sidebar-menu-item">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#estimate">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Estimates</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse  " id="estimate">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('estimate.index') }}">
+                                                    <span class="sidebar-menu-text">Estimates List</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <ul class="sidebar-submenu collapse  " id="estimate">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button"
+                                                    href="{{ route('estimate.create') }}">
+                                                    <span class="sidebar-menu-text">Add Estimate</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <ul class="sidebar-submenu collapse  " id="estimate">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button"
+                                                    href="{{ route('estimate_status.index') }}">
+                                                    <span class="sidebar-menu-text">Panding Estimates</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <ul class="sidebar-submenu collapse  " id="estimate">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button"
+                                                    href="{{ route('approved_estimate') }}">
+                                                    <span class="sidebar-menu-text">Accepted Estimates</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <ul class="sidebar-submenu collapse  " id="estimate">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button"
+                                                    href="{{ route('declined_estimate') }}">
+                                                    <span class="sidebar-menu-text">Declined Estimates</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="sidebar-menu-item">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#invoice">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Invoice</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse" id="invoice">
+                                            <li class="sidebar-menu-item">
+                                                <a class="sidebar-menu-button" href="{{ url('admin/invoice') }}">
+                                                    <span class="sidebar-menu-text">View Invoice</span>
+                                                </a>
+                                            </li>
 
-                                    </ul>
-                                </li>
-                            </ul>
+                                        </ul>
+                                    </li>
+                                    <li class="sidebar-menu-item  ">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#payment">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Payment</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse" id="payment">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('payments.index') }}">
+                                                    <span class="sidebar-menu-text">Payment List</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <ul class="sidebar-submenu collapse" id="payment">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('paymentreceived.index') }}">
+                                                    <span class="sidebar-menu-text">Payment Report</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="sidebar-menu-item  ">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#project">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Project</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse  " id="project">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('project.index') }}">
+                                                    <span class="sidebar-menu-text">All Project</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="sidebar-menu-item ">
+                                        <a class="sidebar-menu-button"  href="{{route('task_list.index')}}">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Task List</span>
+                                        </a>
+    
+                                    </li>
+
+                                    <li class="sidebar-menu-item">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#tax_rule">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Tax Rules</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse  " id="tax_rule">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('tax.index') }}">
+                                                    <span class="sidebar-menu-text">Tax Rules List</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <ul class="sidebar-submenu collapse " id="tax_rule">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('tax.create') }}">
+                                                    <span class="sidebar-menu-text">Add New</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+
+                                    <li class="sidebar-menu-item  ">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#unit">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Units</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse  " id="unit">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('unit.index') }}">
+                                                    <span class="sidebar-menu-text">Unit List</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <ul class="sidebar-submenu collapse  " id="unit">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('unit.create') }}">
+                                                    <span class="sidebar-menu-text">Add New</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+
+                                    <li class="sidebar-menu-item  ">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#item">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Items</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse  " id="item">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('item.index') }}">
+                                                    <span class="sidebar-menu-text">Items</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <ul class="sidebar-submenu collapse  " id="item">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('item.create') }}">
+                                                    <span class="sidebar-menu-text">Add New</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                 
+
+                                    
+
+                                    
+                                    
+
+
+                                    
+
+
+                                    
 
 
 
+                                    <li class="sidebar-menu-item  ">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#expense">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Expense</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse  " id="expense">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('expense.create') }}">
+                                                    <span class="sidebar-menu-text">Add Expense</span>
+                                                </a>
+                                            </li>
+                                        </ul>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @else
-            <div class="mdk-drawer-layout js-mdk-drawer-layout" data-push data-responsive-width="992px">
-                <div class="mdk-drawer-layout__content page">
+                                        <ul class="sidebar-submenu collapse  " id="expense">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('expense.index') }}">
+                                                    <span class="sidebar-menu-text">Expense List</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="sidebar-menu-item">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#user">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">User</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse  " id="user">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('users.index') }}">
+                                                    <span class="sidebar-menu-text">User List</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="sidebar-menu-item  ">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#drpartment">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Departments</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse  " id="drpartment">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button"
+                                                    href="{{ route('department.index') }}">
+                                                    <span class="sidebar-menu-text">Department List</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
 
-                    <div class="container-fluid page__heading-container">
-                        <div class="page__heading d-flex align-items-end">
-                            <div class="flex">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">@yield('page_title')</li>
-                                    </ol>
-                                </nav>
-                                <h1 class="m-0">@yield('page_title')</h1>
+                                   
+
+
+                                    
+
+
+
+                                    <li class="sidebar-menu-item  ">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#exp_cat">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Settings</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse  " id="exp_cat">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button"
+                                                    href="{{ route('expensecat.index') }}">
+                                                    <span class="sidebar-menu-text">Expense Category</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <ul class="sidebar-submenu collapse  " id="exp_cat">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button"
+                                                    href="{{ route('expensecat.create') }}">
+                                                    <span class="sidebar-menu-text">Add Expense Category</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+
+                                    
+
+
+                                </ul>
+
+
                             </div>
-
                         </div>
                     </div>
 
-                    <div class="container-fluid page__container">
 
-                        <div class="row card-group-row">
+                @else
 
-                            <div class="col-lg-12 col-md-12 ">
-                                @yield('content')
+                    <div class="mdk-drawer  js-mdk-drawer" id="default-drawer" data-align="start">
+                        <div class="mdk-drawer__content">
+                            <div class="sidebar sidebar-light sidebar-left sidebar-p-t" data-perfect-scrollbar>
+                                <div class="sidebar-heading">Menu</div>
+                                <ul class="sidebar-menu">
+                                    <li class="sidebar-menu-item  ">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#dashboards_menu">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Dashboards</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse" id="dashboards_menu">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('dashboard') }}">
+                                                    <span class="sidebar-menu-text">Dashboard</span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+
+                                    <li class="sidebar-menu-item">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#proposal">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Proposals</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+
+                                        <ul class="sidebar-submenu collapse" id="proposal" >
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button"
+                                                    href="{{ route('proposals.index') }}">
+                                                    <span class="sidebar-menu-text">View All Proposals</span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button"
+                                                    href="{{ route('proposals.status') }}">
+                                                    <span class="sidebar-menu-text">View Proposal Status</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+
+                                    <li class="sidebar-menu-item">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#invoice">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Invoice</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+
+                                        <ul class="sidebar-submenu collapse" id="invoice" >
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button"
+                                                    href="{{ route('customer_invoice.index') }}">
+                                                    <span class="sidebar-menu-text">View All Invoices</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+
+
+                                    <li class="sidebar-menu-item">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#dashboards_menu">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Estimate</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse" id="dashboards_menu">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('cm_estimate') }}">
+                                                    <span class="sidebar-menu-text">Estimate list</span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+
+
+                                    <li class="sidebar-menu-item">
+                                        <a class="sidebar-menu-button" data-toggle="collapse" href="#customer">
+                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
+                                            <span class="sidebar-menu-text">Customer</span>
+                                            <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                        </a>
+                                        <ul class="sidebar-submenu collapse" id="customer">
+                                            <li class="sidebar-menu-item ">
+                                                <a class="sidebar-menu-button" href="{{ route('customer.index') }}">
+                                                    <span class="sidebar-menu-text">My Info</span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+
+
+
+
+                                </ul>
+
+
+
+
                             </div>
                         </div>
                     </div>
+                @endif
 
-                </div>
-                <!-- // END drawer-layout__content -->
-
-                <div class="mdk-drawer  js-mdk-drawer" id="default-drawer" data-align="start">
-                    <div class="mdk-drawer__content">
-                        <div class="sidebar sidebar-light sidebar-left sidebar-p-t" data-perfect-scrollbar>
-                            <div class="sidebar-heading">Menu</div>
-                            <ul class="sidebar-menu">
-                                <li class="sidebar-menu-item active open">
-                                    <a class="sidebar-menu-button" data-toggle="collapse" href="#dashboards_menu">
-                                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
-                                        <span class="sidebar-menu-text">Dashboards c</span>
-                                        <span class="ml-auto sidebar-menu-toggle-icon"></span>
-                                    </a>
-                                    <ul class="sidebar-submenu collapse show " id="dashboards_menu">
-                                        <li class="sidebar-menu-item active">
-                                            <a class="sidebar-menu-button" href="{{route('dashboard')}}">
-                                                <span class="sidebar-menu-text">Dashboard c</span>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                                <li class="sidebar-menu-item active open">
-                                    <a class="sidebar-menu-button" data-toggle="collapse" href="#dashboards_menu">
-                                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dvr</i>
-                                        <span class="sidebar-menu-text">Estimate</span>
-                                        <span class="ml-auto sidebar-menu-toggle-icon"></span>
-                                    </a>
-                                    <ul class="sidebar-submenu collapse show " id="dashboards_menu">
-                                        <li class="sidebar-menu-item active">
-                                            <a class="sidebar-menu-button" href="{{route('cm_estimate')}}">
-                                                <span class="sidebar-menu-text">Estimate list</span>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                            </ul>
-
-
-
-
-                        </div>
-                    </div>
-                </div>
             </div>
-            @endif
             <!-- // END drawer-layout -->
 
         </div>
@@ -361,64 +731,96 @@
 
 
     <!-- Bootstrap -->
-    <script src="{{asset('assets/vendor/popper.min.js')}}"></script>
-    <script src="{{asset('assets/vendor/bootstrap.min.js')}}"></script>
+    <script src="{{ asset('assets/vendor/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap.min.js') }}"></script>
 
     <!-- Perfect Scrollbar -->
-    <script src="{{asset('assets/vendor/perfect-scrollbar.min.js')}}"></script>
+    <script src="{{ asset('assets/vendor/perfect-scrollbar.min.js') }}"></script>
 
     <!-- DOM Factory -->
-    <script src="{{asset('assets/vendor/dom-factory.js')}}"></script>
+    <script src="{{ asset('assets/vendor/dom-factory.js') }}"></script>
+
+    
+    {{-- toastr --}}
+    <script src="{{ asset('assets/vendor/toastr.min.js') }}"></script>
 
     <!-- MDK -->
-    <script src="{{asset('assets/vendor/material-design-kit.js')}}"></script>
+    <script src="{{ asset('assets/vendor/material-design-kit.js') }}"></script>
 
     <!-- App -->
-    <script src="{{asset('assets/js/script.js')}}"></script>
+    <script src="{{ asset('assets/js/script.js') }}"></script>
 
     <!-- App Settings (safe to remove) -->
-    <script src="{{asset('assets/js/app-settings.js')}}"></script>
+    <script src="{{ asset('assets/js/app-settings.js') }}"></script>
 
     <!-- table -->
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+    <!-- datatable responsive js-->
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+
+
     {{-- file type name --}}
     <script>
-        $("input[type=file]").change(function () {
-        var fieldVal = $(this).val();
+        $("input[type=file]").change(function() {
+            var fieldVal = $(this).val();
 
-        // Change the node's value by removing the fake path (Chrome)
-        fieldVal = fieldVal.replace("C:\\fakepath\\", "");
+            // Change the node's value by removing the fake path (Chrome)
+            fieldVal = fieldVal.replace("C:\\fakepath\\", "");
 
-        if (fieldVal != undefined || fieldVal != "") {
-            $(this).next(".custom-file-label").attr('data-content', fieldVal);
-            $(this).next(".custom-file-label").text(fieldVal);
-        }
-    });
+            if (fieldVal != undefined || fieldVal != "") {
+                $(this).next(".custom-file-label").attr('data-content', fieldVal);
+                $(this).next(".custom-file-label").text(fieldVal);
+            }
+        });
     </script>
     {{-- Table --}}
     <script>
-        $(document).ready(function () {
-            $('.data_table').DataTable()
+        $(document).ready(function() {
+            $('.data_table').DataTable({
+                responsive:true,
+                serverSide: false
+            });
+            
         });
     </script>
     {{-- Ck editor --}}
     <script>
         ClassicEditor
-                .create( document.querySelector( '.ckEditor' ) )
-                .then( editor => {
-                        console.log( editor );
-                } )
-                .catch( error => {
-                        console.error( error );
-                } );
+            .create(document.querySelector('.ckEditor'))
+            .then(editor => {
+                console.log(editor);
+            })
+            .catch(error => {
+                console.log(error);
+            });
     </script>
 
-    {{-- customer view collaps --}}
+
     <script>
-        jQuery('.btnGroup').click( function(e) {
-        jQuery('.collapse').collapse('hide');
-    });
+        $(document).ready(function() {
+            $('.toast').toast('show');
+
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+        });
     </script>
+
 
 
 </body>

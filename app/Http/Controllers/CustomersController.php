@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rules\Unique;
+use DateTime;
 use App\Models\User;
-use App\Models\customers;
 use App\Models\Contact;
+use App\Models\Project;
+use App\Models\customers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Validation\Rules\Unique;
 
 
 class CustomersController extends Controller
@@ -160,14 +162,26 @@ class CustomersController extends Controller
         User::find($id)->delete();
         return redirect()->route('customers.index');
     }
+
     public function details($id)
     {
         $data = customers::find($id);
-        $dataCon = Contact::where('customer_id',$id)->get();
-        return view('admin.customer.customer_details', compact('data','dataCon'));
+        $dataCon = Contact::where('customer_id', $id)->get();
+        return view('admin.customer.customer_details', compact('data', 'dataCon'));
     }
-    public function gantt()
+
+    public function gantt($id)
     {
-        return view('admin.gantt');
+        // dd($id);
+        $project = Project::where('id', $id)->first();
+        $p_id = $project->id;
+
+        $start_date = $project->start_date;
+        // dd($start_date);
+        $date1 = new DateTime($project->start_date);
+        $date2 = new DateTime($project->end_date);
+        $interval = $date1->diff($date2);
+        $days=$interval->days;
+        return view('admin.gantt', compact('p_id','start_date','days'));
     }
 }
